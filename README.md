@@ -2,15 +2,15 @@
 
 Option 1: Install the latest development version directly from GitHub.
 ```
-pip install "azure_authentication@git+https://github.com/malsch/lmu-soda-utils.git/#subdirectory=azure_authentication"
+pip install "azure_authentication@git+https://github.com/soda-lmu/azure-auth-helper-python.git"
 ```
 
 Option 2: Use `httpimport` to load the module `azure_authentication.customized_azure_login` remotely 
 from GitHub without installing it.
 ```
 import httpimport
-with httpimport.github_repo(username='malsch', repo='lmu-soda-utils', ref='main'):
-    from azure_authentication.customized_azure_login import CredentialFactory
+with httpimport.remote_repo('https://raw.githubusercontent.com/soda-lmu/azure-auth-helper-python/main/src/azure_authentication/'):
+    from customized_azure_login import CredentialFactory
 ```
 
 # Usage
