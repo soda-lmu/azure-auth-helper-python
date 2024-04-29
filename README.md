@@ -15,7 +15,7 @@ with httpimport.remote_repo('https://raw.githubusercontent.com/soda-lmu/azure-au
 
 # Usage
 
-You may need to log in to Microsoft Entra ID to use services like Azure OpenAI. Our recepies about [Working with Azure OpenAI](../lmu-soda-knowledge-sharing-tutorials/tree/main/code-recipies#working-with-azure-openai) 
+You may need to log in to Microsoft Entra ID to use services like Azure OpenAI. Our recepies about [Working with Azure OpenAI](../../../lmu-soda-knowledge-sharing-tutorials/tree/main/code-recipies#working-with-azure-openai) 
 demonstrate the log-in process in context.
 
 The `azure_authentication` package supports the login process. Different users 
