@@ -25,7 +25,7 @@ from openai import AzureOpenAI
 import azure.identity
 
 
-class _AzureConnectors:
+class _AzureConnectorsMixin:
 
     def get_login_token_to_azure_cognitive_services(self) -> Callable[[], str]:
         """
@@ -39,7 +39,7 @@ class _AzureConnectors:
         return azure.identity.get_bearer_token_provider(self, "https://cognitiveservices.azure.com/.default")
 
 
-class _CustomizedDefaultAzureCredential(azure.identity.DefaultAzureCredential, _AzureConnectors):
+class _CustomizedDefaultAzureCredential(azure.identity.DefaultAzureCredential, _AzureConnectorsMixin):
 
     def __init__(self, weblogin):
         """
@@ -57,7 +57,7 @@ class _CustomizedDefaultAzureCredential(azure.identity.DefaultAzureCredential, _
             super().__init__(exclude_interactive_browser_credential=True)
 
 
-class _CustomizedInteractiveBrowserCredential(azure.identity.InteractiveBrowserCredential, _AzureConnectors):
+class _CustomizedInteractiveBrowserCredential(azure.identity.InteractiveBrowserCredential, _AzureConnectorsMixin):
     """Opens a browser to interactively authenticate users.
 
     We enable persistent token caching with interactive login, see the documentation at
