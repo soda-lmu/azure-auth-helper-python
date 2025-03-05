@@ -30,12 +30,25 @@ from azure_authentication.customized_azure_login import CredentialFactory
 
 credential = CredentialFactory().select_credential()
 token_provider = credential.get_login_token_to_azure_cognitive_services()
+
+print(token_provider())
 ```
 
 1. `CredentialFactory().select_credential()` selects the appropriate Credential class (inherited from `azure-identity`) to authenticate 
 with Microsoft Azure Entra ID. It is best to be controlled by the user with environment variables.
 2. `get_login_token_to_azure_cognitive_services()` returns a user's personal access token. It can
 be used later to access Azure Cognitive Services (e.g. Azure OpenAI).
+
+Alternatively, one can also use the method `create_and_keep_valid_azure_access_token()`. It stores an access_token `azure_access_token` in the `customized_azure_login`-namespace. This technique is often preferable because the token gets updated automatically before it expires.
+
+```
+from azure_authentication import customized_azure_login
+
+credential = customized_azure_login.CredentialFactory().select_credential()
+credential.create_and_keep_valid_azure_access_token() # provides 'azure_access_token'
+
+print(customized_azure_login.`azure_access_token`)
+```
 
 Environment variables should control what exactly happens when the function `select_credential()` is called.
 Environment variables that are specific to this package start with `AZURE_SODA_...`, see the [Authentication Workflow Setup](AuthenticationWorkflowSetup.md)
@@ -72,7 +85,7 @@ will try a chain of authentication methods, including:
 More complex log-in workflows could be programmed using the [Microsoft Authentication Library (MSAL)](https://github.com/AzureAD/microsoft-authentication-library-for-python).
 
 In any case, when you execute the function `token_provider()` (or `get_token()`) you should get an access token. 
-Access tokens in Azure expire after approx. 1 hour if they are not refreshed during this time.
+Access tokens in Azure expire after approx. 1 hour if they are not refreshed during this time. `create_and_keep_valid_azure_access_token()` updates the access_token automatically before it expires.
 If you try using an API after the access token expired, you will get an authentication error. For more details, 
 see the [token documentation](https://learn.microsoft.com/en-us/entra/identity-platform/security-tokens)
 on the Azure Identity platform.

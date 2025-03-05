@@ -12,17 +12,32 @@ Typical usage example:
 
     credential = CredentialFactory().select_credential()
     token_provider = credential.get_login_token_to_azure_cognitive_services()
+
+or
+
+    import httpimport
+    with httpimport.github_repo(username='malsch', repo='lmu-soda-utils', ref='main'):
+        from azure_authentication import customized_azure_login
+
+    credential = customized_azure_login.CredentialFactory().select_credential()
+    credential.create_and_keep_valid_azure_access_token() # provides 'azure_access_token'
+
+    print(azure_access_token)
 """
 
 import json
 import os
 import os.path
+import time
+import threading
 from typing import Callable
 
 from dotenv import load_dotenv
 from openai import AzureOpenAI
 
 import azure.identity
+
+azure_access_token = "You need to run 'customized_azure_login.CredentialFactory().select_credential().create_and_keep_valid_azure_access_token()' before you can make use of 'azure_access_token'"
 
 
 class _AzureConnectorsMixin:
@@ -37,6 +52,20 @@ class _AzureConnectorsMixin:
         :return: A callable that returns a bearer token.
         """
         return azure.identity.get_bearer_token_provider(self, "https://cognitiveservices.azure.com/.default")
+
+    def _refresh_token(self):
+        """Periodically refresh the token (e.g., every 50 minutes)."""
+        global azure_access_token
+
+        while True:
+            azure_access_token = self.get_token("https://cognitiveservices.azure.com/.default").token
+            time.sleep(50 * 60)  # Refresh every 50 minutes
+
+    def create_and_keep_valid_azure_access_token(self):
+        """Create the initial token."""
+        # Start a background thread for token refresh
+        thread = threading.Thread(target=self._refresh_token, daemon=True)
+        thread.start()
 
 
 class _CustomizedDefaultAzureCredential(azure.identity.DefaultAzureCredential, _AzureConnectorsMixin):

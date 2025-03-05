@@ -10,7 +10,7 @@ where = ["src"] # optional, ["."] by default
 
 [project]
 name = "azure_authentication"
-version = "0.0.1"
+version = "0.0.2"
 description = "Customized authentification to Microsoft Azure (A wrapper around the azure-identity package)"
 authors = [
   { name="Malte Schierholz" }
