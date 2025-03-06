@@ -39,17 +39,6 @@ with Microsoft Azure Entra ID. It is best to be controlled by the user with envi
 2. `get_login_token_to_azure_cognitive_services()` returns a user's personal access token. It can
 be used later to access Azure Cognitive Services (e.g. Azure OpenAI).
 
-Alternatively, one can also use the method `create_and_keep_valid_azure_access_token()`. It stores an access_token `azure_access_token` in the `customized_azure_login`-namespace. This technique is often preferable because the token gets updated automatically before it expires.
-
-```
-from azure_authentication import customized_azure_login
-
-credential = customized_azure_login.CredentialFactory().select_credential()
-credential.create_and_keep_valid_azure_access_token() # provides 'azure_access_token'
-
-print(customized_azure_login.`azure_access_token`)
-```
-
 Environment variables should control what exactly happens when the function `select_credential()` is called.
 Environment variables that are specific to this package start with `AZURE_SODA_...`, see the [Authentication Workflow Setup](AuthenticationWorkflowSetup.md)
 

@@ -53,6 +53,7 @@ class _AzureConnectorsMixin:
         """
         return azure.identity.get_bearer_token_provider(self, "https://cognitiveservices.azure.com/.default")
 
+    # This alternative authentication technique works, but it is no improvement. We still get authentication errors after 1h with llamaindex/Azure OpenAi.
     def _refresh_token(self):
         """Periodically refresh the token (e.g., every 50 minutes)."""
         global azure_access_token
